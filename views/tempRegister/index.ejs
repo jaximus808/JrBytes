@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <label name="username">Username</label>
+        <input autocomplete="off"name="username" id="username">
+        <p></p>
+        <label name="email">Email</label>
+        <input autocomplete="off"name="email"id="email">
+        <p></p>
+        +1 <label name="phoneNumber">Phone Number</label>
+        <input autocomplete="off"name="phoneNumber"id="phoneNumber">
+        <p></p>
+        <label name="password">Password</label>
+        <input type="password" name="password"id="password">
+        <p></p>
+        <button onclick="Register()" >Register</button>
+        <p></p>
+        <p id="status">status:</p>
+        <script > 
+            const Register = () =>
+{
+    const data = {
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phoneNumber").value,
+        password: document.getElementById("password").value
+    }
+    console.log(document.getElementById("phoneNumber").value)
+    fetch("http://localhost:3000/api/user/createUser", {
+        method:"POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then(data =>data.json())
+    .then(res => {
+        if(res.error) 
+        {
+            document.getElementById("status").innerHTML=`status: ${res.message}`
+            
+        }
+        else 
+        {
+            if(localStorage.getItem("access-token")) localStorage.removeItem("access-token")
+            localStorage.setItem("access-token",res.message);
+            window.location.replace("/auth/viewPet/");
+        }
+    });
+}
+        </script>
+    </body>
+</html>
